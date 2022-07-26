@@ -1,45 +1,22 @@
 //UU
-#define Fenilalanina 'UUU'
-#define Fenilalanina 'UUC'
+#define Fenilalanina 'UUU' 'UUC'
 
-#define Leucina 'UUA'
-#define Leucina 'UUG'
-//CU
-#define Leucina 'CUU'
-#define Leucina 'CUC'
-#define Leucina 'CUA'
-#define Leucina 'CUG'
+#define Leucina 'UUA' 'UUG' 'CUU' 'CUC' 'CUA' 'CUG'
+
 //UC
-#define Serina 'UCU'
-#define Serina 'UCC'
-#define Serina 'UCA'
-#define Serina 'UCG'
+#define Serina 'UCU' 'UCC' 'UCA' 'UCG'
 
 //UA
-#define Tirosina 'UAU'
-#define Tirosina 'UAC'
-
-//--Condons de Parada
-#define Códondeparada 'UAA'
-#define Códondeparada 'UAG'
+#define Tirosina 'UAU' 'UAC' // Cóndon de parada
 
 //UG
 #define Códondeparada 'UGA'
-
-//--
-#define Cisteína 'UGU' 
-#define Cisteína 'UGC'
+#define Cisteína 'UGU' 'UGC'
 #define Triptofano 'UGG'
 
 //CC
-#define Prolina 'CCU'
-#define Prolina 'CCC'
-#define Prolina 'CCA'
-#define Prolina 'CCG'
-#define Histidina 'CAU'
-#define Histidina 'CAC'
+#define Prolina 'CCU' 'CCC' 'CCA' 'CCG'
+#define Histidina 'CAU' 'CAC'
 
 //AU
-//--Condons de Iniciacao
-#define Metionina 'AUG'
-#define Códondeiniciação 'AUG'
+#define Metionina 'AUG' //Condons de Iniciacao

@@ -19,19 +19,20 @@ int obtem_codon_inicio (FILE* entrada) {
 	entrada = fopen("entrada.txt", "r");
 
 	char base_nitrogenada;
+	
+	while (!feof(entrada) ) {
 
-	while (base_nitrogenada != ADENINA) {
+		do { fscanf(entrada, "%c", base_nitrogenada);
+
+		} while (base_nitrogenada != ADENINA);
 
 		fscanf(entrada, "%c", base_nitrogenada);
+
+		if (base_nitrogenada != URACILA) obtem_codon_inicio;
+		else fscanf(entrada, "%c", base_nitrogenada);
+
+		if (base_nitrogenada != GUANINA) obtem_codon_inicio;
 	}
-
-	fscanf(entrada, "%c", base_nitrogenada);
-
-	if (base_nitrogenada != URACILA) obtem_codon_inicio;
-
-	else fscanf(entrada, "%c", base_nitrogenada);
-
-	if (base_nitrogenada != GUANINA) obtem_codon_inicio;
 
 	return fseek (entrada, 0, SEEK_CUR);
 }
@@ -56,11 +57,11 @@ int main (int argc, char** argv) {
 		return SUCESSO;
 	}
 
-	while (!feof(entrada)) {
 
-		int inicio = obtem_codon_inicio;
-		fseek(entrada, inicio, SEEK_SET);
-	}
+	int inicio = fseek(entrada, 0, SEEK_SET);
+
+	inicio = obtem_codon_inicio(entrada);
+	fseek(entrada, inicio, SEEK_SET);
 
 	fclose(entrada);
 	return SUCESSO;
