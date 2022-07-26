@@ -1,47 +1,39 @@
 
-// Código Genético
-// Artur Gonzaga && Julia Leão 
-// 
-// Após o estudo de Ácidos Nucleícos, surgiu a ideia de implementar
-// os processos estudados em um projeto. 
-// 
-// - Processo de Transcrição ( DNA -> RNA )
-//
-
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "listas.h"
-#include "aminoacidos.h"
-
+#include "ListaCodons.h"
 
 #define SUCESSO 0
-
-#define ADENINA 97
-#define CITOSINA 99
-#define GUANINA 103
-#define TININA 116
-#define URACILA 117
-
 #define TAM_AMINOACIDO 3
-;
 
-void obtem_codon_inicio (FILE* entrada) {
+#define ADENINA 'a'
+#define CITOSINA 'c'
+#define GUANINA 'g'
+#define TININA 't'
+#define URACILA 'u'
+
+int obtem_codon_inicio (FILE* entrada) {
+
+	entrada = fopen("entrada.txt", "r");
 
 	char base_nitrogenada;
 
+	while (base_nitrogenada != ADENINA) {
 
-	do { fscanf(entrada, "%c", base_nitrogenada);
+		fscanf(entrada, "%c", base_nitrogenada);
+	}
 
-	} while (base_nitrogenada = !ADENINA);
+	fscanf(entrada, "%c", base_nitrogenada);
 
-	do { fscanf(entrada, "%c", base_nitrogenada);
+	if (base_nitrogenada != URACILA) obtem_codon_inicio;
 
-	} while (base_nitrogenada = !URACILA);
+	else fscanf(entrada, "%c", base_nitrogenada);
 
-	do { fscanf(entrada, "%c", base_nitrogenada);
+	if (base_nitrogenada != GUANINA) obtem_codon_inicio;
 
-	} while (base_nitrogenada = !GUANINA);
+	return fseek (entrada, 0, SEEK_CUR);
 }
 
 int main (int argc, char** argv) {
@@ -50,33 +42,26 @@ int main (int argc, char** argv) {
 	char n_base; // base nitrogenada
 	
 	char amostra[TAM_AMINOACIDO];
+	
+	lista_t* rna_ribossomico;
 
-	entrada = fopen("./entrada.txt", "r");
+
+	entrada = fopen("entrada.txt", "r");
 
 	//Testa se o arquivo foi aberto
 	if (entrada == NULL) {
 
 
-		fputs("ERRO: O arquivo não pode ser encontrado\n", stderr);
+		printf ("ERRO: O arquivo não pode ser encontrado\n");
 		return SUCESSO;
 	}
 
 	while (!feof(entrada)) {
 
-		do {
-
-			fscanf(entrada, "%c", &n_base);
-			if (n_base =)
-
-
-		} while (n_base != ADENINA )
-
-
-
-
-
+		int inicio = obtem_codon_inicio;
+		fseek(entrada, inicio, SEEK_SET);
 	}
 
-	
+	fclose(entrada);
 	return SUCESSO;
 }
