@@ -15,7 +15,7 @@
 #define TININA 'T'
 #define URACILA 'U'
 
-void* obtem_codon_inicio (FILE* entrada) {
+void obtem_codon_inicio (FILE* entrada) {
 
 	char base_nitrogenada;
 
@@ -41,14 +41,11 @@ void* obtem_codon_inicio (FILE* entrada) {
 	// AU OK, resta apenas G
 	if (base_nitrogenada != GUANINA) obtem_codon_inicio (entrada);
 
-	return entrada->_Placeholder;
 }
 
 fila_lst* insere_aminoacido(fila_lst* rna_r, char* codon_p, FILE* aminoacidos) {
 
 	char* codon_cmp = (char*) malloc ( sizeof(char) * TAM_AMINOACIDO );
-
-	fseek(aminoacidos, 0, SEEK_SET); // Colocar cursor no inicio do arquivo
 
 	// toupper em toda a string
 	for (int i = 0; i < TAM_AMINOACIDO; i++) {
@@ -63,30 +60,31 @@ fila_lst* insere_aminoacido(fila_lst* rna_r, char* codon_p, FILE* aminoacidos) {
 
 		if (strcmp(codon_p, codon_cmp) == 0) {
 
-			fseek(aminoacidos, 1, SEEK_CUR); // Pula espaço em branco
+			fseek(aminoacidos, 1, SEEK_CUR); // Pula espaï¿½o em branco
 			fread(codon_p, sizeof(char), TAM_AMINOACIDO, aminoacidos);
 			
 			fila_lst_insere(rna_r, codon_p);
 			return rna_r;
 		}
 
-		if (!feof(aminoacidos)) { // Necessária dupla verificação por estar dentro de um laço
+		if (!feof(aminoacidos)) { // Necessï¿½ria dupla verificaï¿½ï¿½o por estar dentro de um laï¿½o
 			
 			fseek(aminoacidos, 5, SEEK_CUR); // Pula para a prox linha
 		}
 	}
 
-	// ".*" indica que apenas parte da string será impressa, no caso até a posição 3 (TAM_AMINOACIDO) 
-	printf("Codon %.*s n%co %c sintetizante.", TAM_AMINOACIDO, codon_p, 198, 130);
+	// ".*" indica que apenas parte da string serï¿½ impressa, no caso atï¿½ a posiï¿½ï¿½o 3 (TAM_AMINOACIDO) 
+	printf("Codon %.*s n%co %c sintetizante.\n", TAM_AMINOACIDO, codon_p, 198, 130);
 
 	free(codon_cmp);
-	return NULL; // Codon não sintetizante
+	return NULL; // Codon nï¿½o sintetizante
 }
 
 int main (int argc, char** argv) {
 
 	fila_lst* rna_r = fila_lst_cria();
 	char* codon = (char*) malloc ( sizeof(char) * TAM_AMINOACIDO );
+	char* codon_termino = (char*) malloc ( sizeof(char) * TAM_AMINOACIDO );
 
 	FILE* entrada = fopen("entrada.txt", "rb"); 
 	FILE* aminoacidos = fopen("aminoacidos.txt", "rb");
@@ -94,25 +92,32 @@ int main (int argc, char** argv) {
 	// Testa abertur dos arquivos
 	if (entrada == NULL || aminoacidos == NULL) {
 		
-		printf ("ERRO: O arquivo não pode ser encontrado\n");
+		printf ("ERRO: O arquivo nï¿½o pode ser encontrado\n");
 		return SUCESSO;
 	}
 
 	/*  Com o sucesso da abertura dos arquivos, o cursor do arquivo  *
-	 *  será movido para o início da sequência sintetizante        */
+	 *  serï¿½ movido para o inï¿½cio da sequï¿½ncia sintetizante        */
 
-	entrada->_Placeholder = obtem_codon_inicio(entrada);
+	
+	obtem_codon_inicio(entrada);
+
+	fseek (aminoacidos, 4, SEEK_SET); // Obtem codon de termino
+	fread(codon_termino, sizeof(char), TAM_AMINOACIDO, aminoacidos);
 
 	do {
+		
+		fseek (aminoacidos, 0, SEEK_SET); // Posiciona cursor no inicio de aminoacidos.txt
 		
 		fread(codon, sizeof(char), TAM_AMINOACIDO, entrada);
 		rna_r = insere_aminoacido (rna_r, codon, aminoacidos);
 		
 		if (rna_r == NULL) return SUCESSO; // Erro ao inserir aminoacido
 
-	} while ( ( !feof(entrada) ) || ( rna_r->fim->info != 'Fim' ) );
-		
+	} while ( ( !feof(entrada) ) && ( strcmp (codon, codon_termino) != 0 ) );
+
 	free(codon);
+	free(codon_termino);
 	fclose(entrada);
 	return SUCESSO;
 }
